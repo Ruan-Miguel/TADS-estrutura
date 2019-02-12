@@ -11,6 +11,8 @@ int fila_vazia();
 
 int fila_cheia();
 
-int insereTad(Filaec *fila,char valor[maxcaracteres]);
+int insereTadPrioridade(Filaec *fila,char valor[maxcaracteres],int prioridade);
 
 char *retiraTad(Filaec *fila);
+
+void imprime_fila(Filaec *fila);

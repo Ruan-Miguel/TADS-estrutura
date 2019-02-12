@@ -31,19 +31,56 @@ int fila_cheia(){
 	return 0;
 }
 
-int insereTad(Filaec *fila,char valor[maxcaracteres]){
+int insereTadPrioridade(Filaec *fila,char valor[maxcaracteres],int prioridade){
 	int resposta;
 	if(fila_cheia()){
 		resposta=0;
 	}else{
 		resposta=1;
-		int local;
-		if(inicio+numComponentes>=tamMax){
-			local=inicio+numComponentes-tamMax;
-		}else{
-			local=inicio+numComponentes;
+		int aux=inicio,aux2;
+		switch(prioridade){
+			case 1:
+			case 2:
+				if(fila_vazia()){
+					if(inicio+numComponentes>=tamMax){
+						aux2=inicio+numComponentes-tamMax;
+					}else{
+						aux2=inicio+numComponentes;
+					}
+					insere_tad(fila->vetorPrincipal,valor,prioridade,aux2);
+				}else{
+					while(retorna_prioridade(fila->vetorPrincipal,aux)<=prioridade){
+						aux++;
+						if(aux==tamMax){
+							aux=0;
+						}
+					}
+					if(inicio+numComponentes-1<tamMax){
+						aux2=inicio+numComponentes-1;
+					}else{
+						aux2=inicio+numComponentes-tamMax-1;
+					}
+					if(aux==aux2){
+						if(inicio+numComponentes>=tamMax){
+							aux2=inicio+numComponentes-tamMax;
+						}else{
+							aux2=inicio+numComponentes;
+						}
+						insere_tad(fila->vetorPrincipal,valor,prioridade,aux2);
+					}
+					realoca(fila->vetorPrincipal,aux,aux2,tamMax);
+					insere_tad(fila->vetorPrincipal,valor,prioridade,aux);
+				}
+				break;
+			case 3:
+				if(inicio+numComponentes>=tamMax){
+					aux2=inicio+numComponentes-tamMax;
+				}else{
+					aux2=inicio+numComponentes;
+				}
+				insere_tad(fila->vetorPrincipal,valor,prioridade,aux2);
+				break;
 		}
-		insere_tad(fila->vetorPrincipal,valor,local);
 		numComponentes++;
 	}
 	return resposta;
@@ -64,4 +101,17 @@ char *retiraTad(Filaec *fila){
 		numComponentes--;
 	}
 	return resposta;
+}
+
+void imprime_fila(Filaec *fila){
+	char *conteudo;
+	int rotacoes=inicio;
+	while(rotacoes!=(inicio+numComponentes)%tamMax){
+		conteudo=retorna_conteudo(fila->vetorPrincipal,rotacoes);
+		printf("conteudo: %s\n",conteudo);
+		rotacoes++;
+		if(rotacoes==tamMax){
+			rotacoes=0;
+		}
+	}
 }
